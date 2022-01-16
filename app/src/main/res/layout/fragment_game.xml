@@ -109,20 +109,20 @@
         </RelativeLayout>
 
 
-        <Button
-            android:visibility="gone"
+        <TextView
             android:id="@+id/Reset"
-            android:layout_width="320dp"
-            android:layout_height="50dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_below="@+id/btn8"
-            android:layout_centerHorizontal="true"
             android:layout_marginTop="80dp"
+            android:gravity="center"
             android:backgroundTint="@color/purple_200"
-            android:text="Reset"
+            android:text="ALIs turn"
+            android:textStyle="bold"
             android:textColor="@color/white"
-            android:textSize="15sp">
+            android:textSize="40sp">
 
-        </Button>
+        </TextView>
 
         <RelativeLayout
             android:layout_width="90dp"

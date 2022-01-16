@@ -43,61 +43,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/player_one" />
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/choose_player"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Choose Player X"
-            android:layout_marginTop="20dp"
-            android:textStyle="bold"
-            android:textColor="@color/white"
-            android:textSize="20sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/player_two"/>
 
 
-        <RadioGroup
-            android:id="@+id/radioGroup"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:weightSum="1"
-            android:gravity="start"
-            android:layout_marginTop="10dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/choose_player">
-            <RadioButton
-                android:id="@+id/radio_random"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:checked="true"
-                android:text="Random  "
-                android:textColor="@color/white"
-                android:textSize="25dp" />
-
-            <RadioButton
-                android:id="@+id/radio_one"
-                android:layout_width="wrap_content"
-                android:layout_height="55dp"
-                android:layout_gravity="center_horizontal"
-                android:checked="false"
-                android:text="Player 1"
-                android:textColor="@color/white"
-                android:textSize="25dp" />
-
-            <RadioButton
-                android:id="@+id/radio_two"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:checked="false"
-                android:text="Player 2"
-                android:textColor="@color/white"
-                android:textSize="25dp" />
-
-        </RadioGroup>
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/start"
@@ -113,7 +60,7 @@
             android:onClick="@{ ()-> viewModel.onStartGame() }"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/radioGroup">
+            app:layout_constraintTop_toBottomOf="@+id/player_two">
 
         </androidx.appcompat.widget.AppCompatButton>
 

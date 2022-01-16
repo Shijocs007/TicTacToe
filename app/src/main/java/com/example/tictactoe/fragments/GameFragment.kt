@@ -1,5 +1,6 @@
 package com.example.tictactoe.fragments
 
+import android.app.AlertDialog
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -14,6 +15,8 @@ import com.example.tictactoe.databinding.FragmentHomeBinding
 import com.example.tictactoe.utils.GameState
 import com.example.tictactoe.utils.PlayerState
 import com.example.tictactoe.viewmodels.GameViewModel
+import android.content.DialogInterface
+import androidx.navigation.Navigation
 
 
 class GameFragment : Fragment(), View.OnClickListener {
@@ -38,6 +41,19 @@ class GameFragment : Fragment(), View.OnClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initClickListentes()
+        initObservers()
+    }
+
+    private fun initObservers() {
+        viewModel.currentPlayer.observe(viewLifecycleOwner, {
+            if(it == PlayerState.PLAYER_ONE) {
+                binding.Reset.text = viewModel.playerOne + " 's Turn"
+                binding.Reset.setTextColor(resources.getColor(android.R.color.holo_green_light))
+            } else {
+                binding.Reset.text = viewModel.playerTwo + " 's Turn"
+                binding.Reset.setTextColor(resources.getColor(android.R.color.holo_red_light))
+            }
+        })
     }
 
     private fun initClickListentes() {
@@ -83,14 +99,50 @@ class GameFragment : Fragment(), View.OnClickListener {
            val winner = viewModel.checkForWinner()
             when(winner) {
                 is GameState.WIN -> {
-                    print("")
+                    showDialogue("WIN!!!!!!", winner.player + " won the match")
                 }
                 is GameState.DRAW -> {
-                    print("")
+                    showDialogue("DRAW!!", "Its a draw")
                 }
             }
         } else {
             Toast.makeText(context, "Already Selected", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    private fun showDialogue(title : String, message : String) {
+        AlertDialog.Builder(activity)
+            .setTitle(title)
+            .setMessage(message)
+            .setPositiveButton(
+                "Restart"
+            ) { dialog, which ->
+                resetGame()
+            }
+            .setNegativeButton(
+                "Back"
+            ) { dialog, which ->
+                resetGame(true)
+            }
+            .show()
+    }
+
+    private fun resetGame(isBack : Boolean = false) {
+        viewModel.resetGame()
+        binding.apply {
+            buttonImage1.setImageDrawable(null)
+            buttonImage2.setImageDrawable(null)
+            buttonImage3.setImageDrawable(null)
+            buttonImage4.setImageDrawable(null)
+            buttonImage5.setImageDrawable(null)
+            buttonImage6.setImageDrawable(null)
+            buttonImage7.setImageDrawable(null)
+            buttonImage8.setImageDrawable(null)
+            buttonImage9.setImageDrawable(null)
+        }
+        if(isBack) {
+            Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).popBackStack()
+        }
+
     }
 }

@@ -1,5 +1,7 @@
 package com.example.tictactoe.viewmodels
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tictactoe.utils.FRAGMENT_HOME_TO_GAME
@@ -14,13 +16,15 @@ class GameViewModel : ViewModel() {
 
     private val _uiFlow = MutableSharedFlow<String>()
     var uiFlow : SharedFlow<String> = _uiFlow
+    private var _currentPlayer =  MutableLiveData<PlayerState>(PlayerState.values().random())
+    var currentPlayer : LiveData<PlayerState> = _currentPlayer
 
     var board = mutableListOf("-1", "-1", "-1", "-1", "-1","-1", "-1", "-1", "-1") // -1 represents initial value for each board
 
     var playerOne = ""
     var playerTwo = ""
 
-    var currentPlayer = PlayerState.values().random()
+    //var _currentPlayer : LiveData = _currentPlayer
 
 
     fun onStartGame() {
@@ -73,15 +77,20 @@ class GameViewModel : ViewModel() {
     }
 
     fun setBoardSelection(position: Int) : PlayerState {
-        if(currentPlayer == PlayerState.PLAYER_ONE) {
+        if(_currentPlayer.value == PlayerState.PLAYER_ONE) {
             board[position] = "X"
-            currentPlayer = PlayerState.PLAYER_TWO
+            _currentPlayer.value = PlayerState.PLAYER_TWO
             return PlayerState.PLAYER_ONE
         } else {
             board[position] = "O"
-            currentPlayer = PlayerState.PLAYER_ONE
+            _currentPlayer.value = PlayerState.PLAYER_ONE
             return PlayerState.PLAYER_TWO
         }
+    }
+
+    fun resetGame() {
+        board = mutableListOf("-1", "-1", "-1", "-1", "-1","-1", "-1", "-1", "-1")
+        _currentPlayer.value = PlayerState.values().random()
     }
 
 }
