@@ -3,6 +3,7 @@ package com.example.tictactoe.viewmodels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tictactoe.utils.FRAGMENT_HOME_TO_GAME
+import com.example.tictactoe.utils.GameState
 import com.example.tictactoe.utils.PlayerState
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,11 +15,12 @@ class GameViewModel : ViewModel() {
     private val _uiFlow = MutableSharedFlow<String>()
     var uiFlow : SharedFlow<String> = _uiFlow
 
-    var currentPlayer = MutableStateFlow<PlayerState>(PlayerState.PLAYER_ONE)
     var board = mutableListOf("-1", "-1", "-1", "-1", "-1","-1", "-1", "-1", "-1") // -1 represents initial value for each board
 
     var playerOne = ""
     var playerTwo = ""
+
+    var currentPlayer = PlayerState.values().random()
 
 
     fun onStartGame() {
@@ -38,16 +40,7 @@ class GameViewModel : ViewModel() {
         return board[position] == "-1"
     }
 
-    fun setCurrentPlayer(player : PlayerState?) {
-        if(player == null) {
-            currentPlayer.value = PlayerState.values().random()
-        } else {
-            currentPlayer.value = player
-        }
-    }
-
-    fun checkForWinner() {
-        viewModelScope.launch {
+    fun checkForWinner() : GameState {
             for (i in 1 until 9) {
                 var result = ""
 
@@ -63,22 +56,31 @@ class GameViewModel : ViewModel() {
                 }
 
                 if(result == "XXX") {
-                    _uiFlow.emit("XXX")
-                    return@launch
+                   return GameState.WIN(playerOne)
                 }
                 if(result == "OOO") {
-                    _uiFlow.emit("OOO")
-                    return@launch
+                    return GameState.WIN(playerTwo)
                 }
 
             }
 
             if(board.contains("-1")) {
-                _uiFlow.emit("Continue")
+                return GameState.PLAYING("")
             } else {
-                _uiFlow.emit("DRAW")
+                return GameState.DRAW("")
             }
 
+    }
+
+    fun setBoardSelection(position: Int) : PlayerState {
+        if(currentPlayer == PlayerState.PLAYER_ONE) {
+            board[position] = "X"
+            currentPlayer = PlayerState.PLAYER_TWO
+            return PlayerState.PLAYER_ONE
+        } else {
+            board[position] = "O"
+            currentPlayer = PlayerState.PLAYER_ONE
+            return PlayerState.PLAYER_TWO
         }
     }
 
