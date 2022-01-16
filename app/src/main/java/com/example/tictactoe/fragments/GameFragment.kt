@@ -17,6 +17,10 @@ import com.example.tictactoe.utils.PlayerState
 import com.example.tictactoe.viewmodels.GameViewModel
 import android.content.DialogInterface
 import androidx.navigation.Navigation
+import androidx.activity.OnBackPressedCallback
+
+
+
 
 
 class GameFragment : Fragment(), View.OnClickListener {
@@ -26,6 +30,14 @@ class GameFragment : Fragment(), View.OnClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val callback: OnBackPressedCallback =
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    showDialogue("EXIT!!", "Are you sure, want to exit?", "Resume", "Exit", true)
+                }
+            }
+        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
     }
 
     override fun onCreateView(
@@ -110,17 +122,21 @@ class GameFragment : Fragment(), View.OnClickListener {
         }
     }
 
-    private fun showDialogue(title : String, message : String) {
+    private fun showDialogue(title : String, message : String, positiveBtn : String = "Restart", nagetiveBtn :String = "Back", isFromBack : Boolean = false) {
         AlertDialog.Builder(activity)
             .setTitle(title)
             .setMessage(message)
             .setPositiveButton(
-                "Restart"
+                positiveBtn
             ) { dialog, which ->
-                resetGame()
+                if (isFromBack) {
+                    dialog.dismiss()
+                } else {
+                    resetGame()
+                }
             }
             .setNegativeButton(
-                "Back"
+                nagetiveBtn
             ) { dialog, which ->
                 resetGame(true)
             }

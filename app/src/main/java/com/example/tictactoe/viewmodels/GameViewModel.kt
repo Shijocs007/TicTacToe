@@ -19,14 +19,16 @@ class GameViewModel : ViewModel() {
     private var _currentPlayer =  MutableLiveData<PlayerState>(PlayerState.values().random())
     var currentPlayer : LiveData<PlayerState> = _currentPlayer
 
-    var board = mutableListOf("-1", "-1", "-1", "-1", "-1","-1", "-1", "-1", "-1") // -1 represents initial value for each board
+    private var board = mutableListOf("-1", "-1", "-1", "-1", "-1","-1", "-1", "-1", "-1") // -1 represents initial value for each board
 
     var playerOne = ""
     var playerTwo = ""
 
-    //var _currentPlayer : LiveData = _currentPlayer
 
-
+    /**
+     * Method called from start button of {@link HomeFragment.kt)
+     * if players names are empty, show toast message to user
+     */
     fun onStartGame() {
         viewModelScope.launch {
             if(playerOne.isBlank())
@@ -40,10 +42,23 @@ class GameViewModel : ViewModel() {
     }
 
 
+    /**
+     * Method used to check, the board position is already played or not.
+     * If board position vacant, board[position] will be -1
+     * @param position board position clicked bu user
+     * @return true, if its -1 , false if it is "X" or "O"
+     */
     fun isBoardVacant(position : Int) : Boolean {
         return board[position] == "-1"
     }
 
+    /**
+     * Method will be called when user select a board
+     * every time it will check all 8 lines in the grid
+     * if result equals "XXX" or "OOO" returns GameState.WIN
+     * if board contains atlest one "-1", the game must continue, so returns GameState.PLAYING
+     * if all boards are selected and no winner, then returns GameState.DRAW
+     */
     fun checkForWinner() : GameState {
             for (i in 1 until 9) {
                 var result = ""
@@ -76,6 +91,12 @@ class GameViewModel : ViewModel() {
 
     }
 
+    /**
+     *  Method will be called when user select a board
+     *  the _currentPlayer player should be changed after selection
+     *  board[position] value set based on which player
+     *  @param position board position selected by user
+     */
     fun setBoardSelection(position: Int) : PlayerState {
         if(_currentPlayer.value == PlayerState.PLAYER_ONE) {
             board[position] = "X"
@@ -88,6 +109,10 @@ class GameViewModel : ViewModel() {
         }
     }
 
+    /**
+     * used to set game to the initial state
+     * currentPlayer will be chose randomly
+     */
     fun resetGame() {
         board = mutableListOf("-1", "-1", "-1", "-1", "-1","-1", "-1", "-1", "-1")
         _currentPlayer.value = PlayerState.values().random()
