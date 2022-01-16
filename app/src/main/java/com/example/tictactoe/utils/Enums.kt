@@ -1,9 +1,9 @@
 package com.example.tictactoe.utils
 
 enum class PlayerState {
-    PLAYER_ONE,PLAYER_TWO,PLAYER_RANDOM
+    PLAYER_ONE,PLAYER_TWO
 }
 
-enum class WinSState {
+enum class WinState {
     WIN,DRAW,PLAYING
 }

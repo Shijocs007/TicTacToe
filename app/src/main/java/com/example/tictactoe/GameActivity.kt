@@ -32,7 +32,7 @@ class GameActivity : AppCompatActivity() {
     private fun initObservers() {
         viewModel.apply {
             lifecycleScope.launch {
-                toastFlow.collectLatest {
+                uiFlow.collectLatest {
                     if(it.equals(FRAGMENT_HOME_TO_GAME)) {
                         Navigation.findNavController(this@GameActivity, R.id.nav_host_fragment).navigate(R.id.gameFragment, null)
                     } else {
